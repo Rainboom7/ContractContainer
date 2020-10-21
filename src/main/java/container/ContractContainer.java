@@ -59,7 +59,6 @@ public class ContractContainer {
      * Delete contract with given id
      *
      * @param searchId the id of contract you want to delete
-     *
      * @throws NoSuchElementException if contract with given id is not present
      */
     public void deleteAt ( int searchId ) {
@@ -76,7 +75,6 @@ public class ContractContainer {
      *
      * @param searchId the id of contract you want to find
      * @return found contract
-     *
      * @throws NoSuchElementException if contract with given id is not present
      */
     public Contract getById ( int searchId ) {
@@ -84,21 +82,27 @@ public class ContractContainer {
         return this.contracts[ index ];
 
     }
+
     /**
      * Util method to find contract with given id;
      *
      * @param searchId the id of contract you want to find
      * @return found contract index in array
-     *
      * @throws NoSuchElementException if contract with given id is not present
      */
     private int findIndexOf ( final int searchId ) {
-        int index = Arrays.binarySearch ( this.contracts, new Contract ( ) {
-            @Override
-            public int getId ( ) {
-                return searchId;
-            }
-        } );
+        int index=-1;
+        try {
+            index = Arrays.binarySearch ( this.contracts, new Contract ( ) {
+                @Override
+                public int getId ( ) {
+                    return searchId;
+                }
+
+            } );
+        } catch ( NullPointerException e ) {
+            throw new NoSuchElementException ( "Contract with id " + searchId + " not found" );
+        }
         if ( index == -1 )
             throw new NoSuchElementException ( "Contract with id " + searchId + " not found" );
         return index;
@@ -120,6 +124,6 @@ public class ContractContainer {
      * @return the int value of capacity
      */
     public int capacity ( ) {
-        return this.capacity;
+        return this.lastContract;
     }
 }

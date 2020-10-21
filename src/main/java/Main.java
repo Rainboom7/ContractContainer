@@ -16,8 +16,8 @@ public class Main {
             contractContainer.add ( new InternetContract ( i, new Date ( ), new Date ( ), new Client ( i, "IVAN", new Date ( ), Sex.MALE, 12323112 ), 1232 ) );
         System.out.println ( contractContainer );
         contractContainer.deleteAt ( 5 );
-        System.out.println ( contractContainer );
-        contractContainer.getById ( 3 );
+        System.out.println (  contractContainer.getById ( 3 ) );
+
 
 
     }
