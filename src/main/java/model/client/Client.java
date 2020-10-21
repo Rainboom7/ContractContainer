@@ -1,5 +1,6 @@
 package model.client;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.Date;
  * The type Client.
  */
 @Data
+@AllArgsConstructor
 public class Client {
     /**
      * Id of client

@@ -3,7 +3,7 @@ package model.client;
 /**
  * The enum Sex.
  */
-enum Sex {
+public enum Sex {
     MALE,
     FEMALE
 }
