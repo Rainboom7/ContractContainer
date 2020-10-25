@@ -4,6 +4,7 @@ import model.contract.Contract;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * The type Contract container.
@@ -74,12 +75,12 @@ public class ContractContainer {
      * Gets by contract by id.
      *
      * @param searchId the id of contract you want to find
-     * @return found contract
-     * @throws NoSuchElementException if contract with given id is not present
+     * @return  optional of found contract or null if not present
      */
-    public Contract getById ( int searchId ) {
+    public Optional<Contract> getById ( int searchId ) {
         int index = findIndexOf ( searchId );
-        return this.contracts[ index ];
+        Optional<Contract> contract = ( index == -1 ) ? Optional.empty ( ) : Optional.of ( this.contracts[ index ] );
+        return contract;
 
     }
 
@@ -87,11 +88,10 @@ public class ContractContainer {
      * Util method to find contract with given id;
      *
      * @param searchId the id of contract you want to find
-     * @return found contract index in array
-     * @throws NoSuchElementException if contract with given id is not present
+     * @return found contract index in array or -1 if not present
      */
     private int findIndexOf ( final int searchId ) {
-        int index=-1;
+        int index = -1;
         try {
             index = Arrays.binarySearch ( this.contracts, new Contract ( ) {
                 @Override
@@ -101,10 +101,8 @@ public class ContractContainer {
 
             } );
         } catch ( NullPointerException e ) {
-            throw new NoSuchElementException ( "Contract with id " + searchId + " not found" );
+            return -1;
         }
-        if ( index == -1 )
-            throw new NoSuchElementException ( "Contract with id " + searchId + " not found" );
         return index;
     }
 

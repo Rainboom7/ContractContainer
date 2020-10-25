@@ -41,17 +41,17 @@ public class ContractContainerTest {
         int expectedId = 57;
         Contract newTelevisionContract = new TelevisionContract ( expectedId, new Date ( ), new Date ( ), secondClient, ChannelPackage.MOVIES );
         Assert.assertThrows ( NoSuchElementException.class, ( ) -> {
-            this.container.getById ( expectedId );
+            this.container.getById ( expectedId ).get ();
         } );
         this.container.add ( newTelevisionContract );
-        Assert.assertEquals ( this.container.getById ( expectedId ),newTelevisionContract );
+        Assert.assertEquals ( this.container.getById ( expectedId ).get (),newTelevisionContract );
 
     }
 
     @Test
     public void throwsExceptionWhenNoSuchElement ( ) {
         Assert.assertThrows ( NoSuchElementException.class, ( ) -> {
-            this.container.getById ( 999 );
+            this.container.getById ( 999 ).get ();
         } );
 
     }
@@ -61,12 +61,12 @@ public class ContractContainerTest {
         int expectedId = 22;
         Contract newTelevisionContract = new TelevisionContract ( expectedId, new Date ( ), new Date ( ), secondClient, ChannelPackage.MOVIES );
         this.container.add ( newTelevisionContract );
-        Assert.assertEquals ( this.container.getById ( expectedId ),newTelevisionContract );
+        Assert.assertEquals ( this.container.getById ( expectedId ).get (),newTelevisionContract );
         int beginCapacity =this.container.capacity ();
         this.container.deleteAt ( expectedId );
         Assert.assertEquals ( this.container.capacity (),beginCapacity-1 );
         Assert.assertThrows ( NoSuchElementException.class, ( ) -> {
-            this.container.getById ( expectedId );
+            this.container.getById ( expectedId ).get ();
         } );
     }
 
