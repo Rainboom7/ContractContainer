@@ -1,5 +1,6 @@
 package container;
 
+import lombok.var;
 import model.client.Client;
 import model.client.Sex;
 import model.contract.*;
@@ -8,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.NoSuchElementException;
 
 public class ContractContainerTest {
@@ -15,9 +17,15 @@ public class ContractContainerTest {
     private final Client firstClient = new Client ( 1, "Ivan Ivanovich Ivanov", new Date ( 2000 ), Sex.MALE, 13233123 );
     private final Client secondClient = new Client ( 2, "Olga Petrova Ivanovna", new Date ( 1980 ), Sex.FEMALE, 1232133 );
 
-    private final Contract cellularContract = new CellularContract ( 1, new Date ( ), new Date ( ), firstClient, 132 );
-    private final Contract internetContract = new InternetContract ( 2, new Date ( ), new Date ( ), firstClient, 75 );
-    private final Contract televisionContract = new TelevisionContract ( 3, new Date ( ), new Date ( ), secondClient, ChannelPackage.MOVIES );
+    private final Contract cellularContract = new CellularContract ( 1,
+            new GregorianCalendar (2010, 0 , 11).getTime (),
+            new GregorianCalendar (2012, 0 , 11).getTime (), firstClient, 132 );
+    private final Contract internetContract = new InternetContract ( 2,
+            new GregorianCalendar (2014, 0 , 11).getTime (),
+            new GregorianCalendar (2016, 0 , 11).getTime (), firstClient, 75 );
+    private final Contract televisionContract = new TelevisionContract ( 3,
+            new GregorianCalendar (2016, 0 , 11).getTime (),
+            new GregorianCalendar (2018, 0 , 11).getTime (), secondClient, ChannelPackage.MOVIES );
 
 
     @Before
@@ -55,6 +63,58 @@ public class ContractContainerTest {
         } );
 
     }
+
+    @Test
+    public void searchesByClientWorks ( ) {
+        var contract = this.container.getByClient ( firstClient );
+        Assert.assertEquals (contract.get ().length,2  );
+
+    }
+    @Test
+    public void searchByDateWorks ( ) {
+        var expectedContract = new TelevisionContract ( 4,
+                new GregorianCalendar (2018, 8 , 11).getTime (),
+                new GregorianCalendar (2017, 0 , 13).getTime (), secondClient,
+                ChannelPackage.MOVIES );
+        this.container.add ( expectedContract );
+        var begin =   new GregorianCalendar (2018, 0 , 11).getTime ();
+        var end =  new GregorianCalendar (2019, 0 , 11).getTime ();
+        Assert.assertEquals (expectedContract,this.container.getContractsAfter ( begin ).get ()[0]  );
+        Assert.assertEquals (expectedContract,this.container.getContractsBetween ( begin,end ).get ()[0]  );
+    }
+    @Test
+    public void sortByDateWorks ( ) {
+        var expectedContract = new TelevisionContract ( 4,
+                new GregorianCalendar (1000, 8 , 11).getTime (),
+                new GregorianCalendar (2035, 0 , 13).getTime (), secondClient,
+                ChannelPackage.MOVIES );
+        this.container.add ( expectedContract );
+
+        this.container.sortByBeginDate ();
+        var contracts = this.container.getAll ();
+        Assert.assertEquals (contracts.get ()[0],expectedContract  );
+
+        this.container.sortByEndDate ();
+        contracts = this.container.getAll ();
+        var lastInd = contracts.get ().length;
+        Assert.assertEquals (contracts.get ()[lastInd-1],expectedContract  );
+
+    }
+    @Test
+    public void sortByClientWorkds ( ) {
+        var newClient = new Client ( 8, "Alexandra Petrova Ivanovna", new Date ( 1980 ), Sex.FEMALE, 1232133 );
+        var expectedContract = new TelevisionContract ( 4,
+                new GregorianCalendar (1000, 8 , 11).getTime (),
+                new GregorianCalendar (2017, 0 , 13).getTime (), newClient,
+                ChannelPackage.MOVIES );
+        this.container.add ( expectedContract );
+        this.container.sortByClientName ();
+        var contracts = this.container.getAll ();
+        Assert.assertEquals (contracts.get ()[0],expectedContract  );
+        var lastInd = contracts.get ().length;
+        Assert.assertEquals (contracts.get ()[lastInd-1],expectedContract  );
+    }
+
 
     @Test
     public void deletingByIdWorks ( ) {
