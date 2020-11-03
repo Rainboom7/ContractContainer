@@ -3,13 +3,15 @@ package container;
 import lombok.var;
 import model.client.Client;
 import model.contract.Contract;
+import util.sorter.ContainerSorter;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * The type Contract container.
  */
-public class ContractContainer {
+public class ContractContainer implements Container<Contract> {
     /**
      * Contract container.
      */
@@ -38,6 +40,12 @@ public class ContractContainer {
         this.capacity = DEFAULT_CAPACITY;
         this.lastContract = -1;
         this.contracts = new Contract[ this.capacity ];
+    }
+
+    public ContractContainer ( ContractContainer container ) {
+        this.capacity = container.capacity ( );
+        this.lastContract = container.capacity ( );
+        this.contracts = container.getAll ( );
     }
 
     /**
@@ -70,15 +78,32 @@ public class ContractContainer {
         this.contracts[ lastContract ] = null;
         this.lastContract--;
     }
+
     /**
-     * Gets all stored contracts
+     * Gets by contract by predicate.
+     *
+     * @param predicate the condition to rely on while searching
+     * @return new container with found contractis
+     */
+    @Override
+    public Container<Contract> search ( Predicate<? super Contract> predicate ) {
+        Container<Contract> found = new ContractContainer ( );
+        for (var contract : this.contracts
+        ) {
+            if ( contract != null && predicate.test ( contract ) )
+                found.add ( contract );
+        }
+        return found;
+    }
+
+
+    /**
+     * Gets all  contracts
      *
      * @return optional of stored contracts
      */
-    public Optional<Contract[]> getAll ( ) {
-        return Optional.of (
-                Arrays.stream ( this.contracts )
-                        .filter ( Objects::nonNull ).toArray ( Contract[]::new ) );
+    public Contract[] getAll ( ) {
+        return this.contracts;
     }
 
     /**
@@ -92,95 +117,6 @@ public class ContractContainer {
         Optional<Contract> contract = ( index == -1 ) ? Optional.empty ( ) : Optional.of ( this.contracts[ index ] );
         return contract;
 
-    }
-
-    /**
-     * Gets contracts with beginning date after parameter date.
-     *
-     * @param begin the  date after which you want to search
-     * @return optional of found contracts
-     */
-    public Optional<Contract[]> getContractsAfter ( Date begin ) {
-        return Optional.of ( Arrays.stream ( this.contracts )
-                .filter ( c ->
-                        c != null
-                                &&
-                                c.getBeginningDate ( ).after ( begin ) )
-                .toArray ( Contract[]::new ) );
-
-    }
-
-    /**
-     * Gets cantracts which begin and end dates are between parameters
-     *
-     * @param begin the  date after which you want to search
-     * @param end   the  date before which you want to search
-     * @return optional of found contracts
-     */
-    public Optional<Contract[]> getContractsBetween ( Date begin, Date end ) {
-        return Optional.of ( (Contract[]) Arrays.stream ( this.contracts )
-                .filter ( c -> c != null
-                        &&
-                        c.getBeginningDate ( ).after ( begin )
-                        &&
-                        c.getEndingDate ( ).before ( end )
-                ).toArray ( Contract[]::new ) );
-
-    }
-
-    /**
-     * Gets cantracts for specific client
-     *
-     * @param client client whose contracts you want to search
-     * @return optional of found contracts
-     */
-    public Optional<Contract[]> getByClient ( Client client ) {
-
-        return Optional.of ( Arrays.stream ( this.contracts )
-                .filter ( c ->
-                        c != null
-                                &&
-                                c.getClient ( ).equals ( client )
-                ).toArray ( Contract[]::new ) );
-    }
-
-    /**
-     * Sorts contracts by id
-     */
-    public void sortById ( ) {
-
-        this.contracts = Arrays.stream ( this.contracts ).sorted ( Comparator.nullsLast ( Comparator.comparing ( Contract::getId ) ) ).toArray ( Contract[]::new );
-    }
-
-    /**
-     * Sorts contracts by client fio
-     */
-    public void sortByClientName ( ) {
-
-        this.contracts = Arrays.stream ( this.contracts ).sorted ( Comparator.nullsLast ( Comparator.comparing ( c -> c.getClient ( ).getFio ( ), String::compareToIgnoreCase ) ) ).toArray ( Contract[]::new );
-    }
-
-    /**
-     * Sorts contracts by client id
-     */
-    public void sortByClientId ( ) {
-
-        this.contracts = Arrays.stream ( this.contracts ).sorted ( Comparator.nullsLast ( Comparator.comparing ( c -> c.getClient ( ).getId ( ), Integer::compareTo ) ) ).toArray ( Contract[]::new );
-    }
-
-    /**
-     * Sorts contracts by beginning date
-     */
-    public void sortByBeginDate ( ) {
-        this.contracts = Arrays.stream ( this.contracts ).sorted ( Comparator.nullsLast ( Comparator.comparing ( Contract::getBeginningDate, Date::compareTo ) ) ).toArray ( Contract[]::new );
-    }
-
-    /**
-     * Sorts contracts by ending date
-     */
-    public void sortByEndDate ( ) {
-
-        this.contracts = Arrays.stream ( this.contracts ).sorted ( Comparator.nullsLast ( Comparator.comparing ( Contract::getEndingDate, Date::compareTo ) ) ).toArray ( Contract[]::new );
     }
 
     /**
@@ -222,5 +158,17 @@ public class ContractContainer {
      */
     public int capacity ( ) {
         return this.lastContract;
+    }
+
+    /**
+     * Sorts contracts with given sorter and comparator.
+     *
+     * @param sorter     the sortew which you want to youse while sorting
+     * @param comparator comparator which defines by which attribute you want to sort
+     * @return the int value of capacity
+     */
+    @Override
+    public void sort ( ContainerSorter<Contract> sorter, Comparator<? super Contract> comparator ) {
+        sorter.sort ( this.contracts, comparator );
     }
 }
