@@ -40,7 +40,7 @@ public class ContractContainer implements Container<Contract> {
     /**
      * Instantiates a new Contract container.
      */
-    public ContractContainer ( ) {
+    private ContractContainer ( ) {
         this.capacity = DEFAULT_CAPACITY;
         this.lastContract = -1;
         this.contracts = new Contract[ this.capacity ];
