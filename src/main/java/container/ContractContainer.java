@@ -17,6 +17,10 @@ public class ContractContainer implements Container<Contract> {
      */
     private Contract[] contracts;
     /**
+     * Sorter that performs contracts' sorting.
+     */
+    private ContainerSorter<Contract> sorter;
+    /**
      * Index of last contract.
      */
     private int lastContract;
@@ -40,6 +44,12 @@ public class ContractContainer implements Container<Contract> {
         this.capacity = DEFAULT_CAPACITY;
         this.lastContract = -1;
         this.contracts = new Contract[ this.capacity ];
+    }
+
+    public ContractContainer ( ContainerSorter<Contract> sorter ) {
+        this ( );
+        this.sorter = sorter;
+
     }
 
     public ContractContainer ( ContractContainer container ) {
@@ -168,7 +178,7 @@ public class ContractContainer implements Container<Contract> {
      * @return the int value of capacity
      */
     @Override
-    public void sort ( ContainerSorter<Contract> sorter, Comparator<? super Contract> comparator ) {
-        sorter.sort ( this.contracts, comparator );
+    public void sort ( Comparator<? super Contract> comparator ) {
+        this.sorter.sort ( this.contracts, comparator );
     }
 }

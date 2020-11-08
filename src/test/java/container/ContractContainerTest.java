@@ -34,7 +34,8 @@ public class ContractContainerTest {
 
     @Before
     public void refillContainer ( ) {
-        this.container = new ContractContainer ( );
+        MergeContractSorter mergeContractSorter = new MergeContractSorter ( );
+        container = new ContractContainer ( mergeContractSorter);
         container.add ( cellularContract );
         container.add ( televisionContract );
         container.add ( internetContract );
@@ -97,12 +98,11 @@ public class ContractContainerTest {
                 new GregorianCalendar ( 2035, 0, 13 ).getTime ( ), secondClient,
                 ChannelPackage.MOVIES );
         this.container.add ( expectedContract );
-        MergeContractSorter mergeContractSorter = new MergeContractSorter ( );
-        this.container.sort ( mergeContractSorter, ContractComparators.byBeginningDate ( ) );
+        this.container.sort (  ContractComparators.byBeginningDate ( ) );
         var contracts = this.container.getAll ( );
         Assert.assertEquals ( contracts[ 0 ], expectedContract );
 
-        this.container.sort ( mergeContractSorter, ContractComparators.byEndingDate ( ) );
+        this.container.sort (  ContractComparators.byEndingDate ( ) );
         contracts = this.container.getAll ( );
         var lastInd = this.container.capacity ( );
         Assert.assertEquals ( contracts[ lastInd ], expectedContract );
@@ -117,8 +117,7 @@ public class ContractContainerTest {
                 new GregorianCalendar ( 2017, 0, 13 ).getTime ( ), newClient,
                 ChannelPackage.MOVIES );
         this.container.add ( expectedContract );
-        BubbleContractSorter bubbleContractSorter = new BubbleContractSorter ( );
-        this.container.sort ( bubbleContractSorter, ContractComparators.byClientName ( ) );
+        this.container.sort (  ContractComparators.byClientName ( ) );
         var contracts = this.container.getAll ( );
         Assert.assertEquals ( contracts[ 0 ], expectedContract );
         var lastInd = this.container.capacity ( );

@@ -18,5 +18,5 @@ public interface Container<T> {
 
     public int capacity ( );
 
-    public void sort ( ContainerSorter<T> sorter, Comparator<? super T> comparator );
+    public void sort (  Comparator<? super T> comparator );
 }
