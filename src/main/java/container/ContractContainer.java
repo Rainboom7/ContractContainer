@@ -3,7 +3,9 @@ package container;
 import lombok.var;
 import model.client.Client;
 import model.contract.Contract;
+import util.sorter.BubbleContractSorter;
 import util.sorter.ContainerSorter;
+import util.sorter.MergeContractSorter;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -38,26 +40,42 @@ public class ContractContainer implements Container<Contract> {
     private static final int DEFAULT_CAPACITY = 8;
 
     /**
-     * Instantiates a new Contract container.
+     * Instantiates a new Contract container with default merge sorter;
      */
-    private ContractContainer ( ) {
+    public ContractContainer ( ) {
         this.capacity = DEFAULT_CAPACITY;
         this.lastContract = -1;
         this.contracts = new Contract[ this.capacity ];
+        this.sorter = new MergeContractSorter ( );
     }
-
+    /**
+     * Instantiates a new Contract container with chosen sorter merge sorter;
+     */
     public ContractContainer ( ContainerSorter<Contract> sorter ) {
-        this ( );
+        this.capacity = DEFAULT_CAPACITY;
+        this.lastContract = -1;
+        this.contracts = new Contract[ this.capacity ];
         this.sorter = sorter;
 
     }
-
+    /**
+     * Instantiates a new Contract container with default merge sorter and with given contracts by another container;
+     */
     public ContractContainer ( ContractContainer container ) {
         this.capacity = container.capacity ( );
         this.lastContract = container.capacity ( );
         this.contracts = container.getAll ( );
+        this.sorter = new MergeContractSorter ( );
     }
-
+    /**
+     * Instantiates a new Contract container with given sorter and with given contracts by another container;
+     */
+    public ContractContainer ( ContractContainer container,ContainerSorter<Contract> sorter ) {
+        this.capacity = container.capacity ( );
+        this.lastContract = container.capacity ( );
+        this.contracts = container.getAll ( );
+        this.sorter = sorter;
+    }
     /**
      * Adds new contract and icreases the size if current capacity is not enough
      *
