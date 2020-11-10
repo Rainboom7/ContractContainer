@@ -16,6 +16,13 @@ public class InternetContract extends Contract {
         this.maxMegabytesSpeed = maxMegabytesSpeed;
     }
 
+    @Override
+    public String toString ( ) {
+        return "InternetContract,\t" +
+                super.toString ()+",\t"+
+                maxMegabytesSpeed +"\n";
+    }
+
     /**
      * Max connection speed in mb/s
      */

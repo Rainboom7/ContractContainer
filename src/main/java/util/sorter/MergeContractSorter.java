@@ -1,6 +1,5 @@
 package util.sorter;
 
-import lombok.var;
 import model.contract.Contract;
 
 import java.util.Comparator;

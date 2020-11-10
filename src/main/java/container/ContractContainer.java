@@ -1,6 +1,5 @@
 package container;
 
-import lombok.var;
 import model.client.Client;
 import model.contract.Contract;
 import util.sorter.BubbleContractSorter;

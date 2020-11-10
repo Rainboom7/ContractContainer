@@ -26,9 +26,20 @@ public class CellularContract extends Contract {
      */
     private int smsAmount;
 
-    public CellularContract ( int id, Date beginningDate, Date endingDate, Client client, int minutes ) {
+    public CellularContract ( int id, Date beginningDate, Date endingDate, Client client, int minutes, int megabytes, int smsAmount ) {
         super ( id, beginningDate, endingDate, client );
         this.minutes = minutes;
+        this.megabytes = megabytes;
+        this.smsAmount = smsAmount;
+    }
+
+    @Override
+    public String toString ( ) {
+        return "CellularContract,\t" +
+                super.toString ( ) + ",\t" +
+                minutes + ",\t" +
+                megabytes + ",\t" +
+                smsAmount + "\n";
     }
 
 

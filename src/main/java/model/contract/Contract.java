@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import model.client.Client;
+import util.DateUtils;
 
 import java.util.Date;
 import java.util.Objects;
@@ -38,6 +39,14 @@ public abstract class Contract implements Comparable<Contract> {
         if ( o == null || getClass ( ) != o.getClass ( ) ) return false;
         Contract contract = (Contract) o;
         return id == contract.id;
+    }
+
+    @Override
+    public String toString ( ) {
+        return   id +
+                ",\t" + DateUtils.getString ( beginningDate ).trim () +
+                ",\t" + DateUtils.getString (endingDate ).trim ()+
+                ",\t" + client.toString ();
     }
 
     @Override
