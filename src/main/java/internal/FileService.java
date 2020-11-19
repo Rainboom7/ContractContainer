@@ -7,5 +7,5 @@ import java.io.IOException;
  */
 public interface FileService<T> {
     void createFile(T fromElement,String fileName) throws IOException;
-    T readFromFile(String filePath) throws IOException;
+    void readFromFile(String filePath, T element ) throws IOException;
 }

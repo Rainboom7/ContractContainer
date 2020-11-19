@@ -6,18 +6,39 @@ import model.client.Client;
 import model.client.Sex;
 import model.contract.*;
 import util.DateUtils;
+import validator.Validator;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Specific service which works with contract container.
  */
 public class ContractFileService implements FileService<Container<Contract>> {
+    private List<Validator<Contract>> validators;
+
+    public ContractFileService ( ) {
+        this.validators = new ArrayList<> ( );
+    }
+
+    public ContractFileService ( List<Validator<Contract>> validators ) {
+        this.validators = validators;
+    }
+
+    /**
+     * Adds given validator to list of validators.
+     *
+     * @param validator validator to add
+     */
+    public void addValidator ( Validator<Contract> validator ) {
+        this.validators.add ( validator );
+    }
 
     /**
      * Creates file with given name and values from given container.
@@ -40,16 +61,16 @@ public class ContractFileService implements FileService<Container<Contract>> {
 
         }
     }
+
     /**
      * Reads values from given CSV file into contract container.
      *
      * @param filePath path to file from which you want to read values
-     * @throws IOException when error occurs while opening file or CSV file format is invalid|
      * @return Contract container with values from given file
+     * @throws IOException when error occurs while opening file or CSV file format is invalid|
      */
     @Override
-    public Container<Contract> readFromFile ( String filePath ) throws IOException {
-        Container<Contract> container = new ContractContainer ( );
+    public void readFromFile ( String filePath, Container<Contract> container ) throws IOException {
         try (BufferedReader reader = new BufferedReader ( new FileReader ( filePath, Charset.defaultCharset ( ) ) )) {
 
             String line;
@@ -60,21 +81,28 @@ public class ContractFileService implements FileService<Container<Contract>> {
                 ) {
                     System.out.println ( "|" + elem + "|" );
                 }
-                container.add ( getContract ( line.split ( ",\t" ) ) );
+                {
+                    var contract = getContract ( line.split ( ",\t" ) );
+                    if ( shouldAdd ( contract ) )
+                        container.add ( contract );
+                    else
+                        System.out.println ( "Contract was'nt added:\n" + contract.toString ( ) );
+
+                }
+
 
             }
+        } catch ( ParseException e ) {
+            throw new IOException ( "Wrong csv formatting" );
         }
-        catch ( ParseException e ) {
-        throw new IOException ( "Wrong csv formatting" );
-           }
-        return container;
     }
+
     /**
      * inner method to read one line of file.
      *
      * @param line line from file whic was turned to array
-     * @throws ParseException when error occurs while parsing date
      * @return Contract parsed from line
+     * @throws ParseException when error occurs while parsing date
      */
     private Contract getContract ( String[] line ) throws ParseException {
 
@@ -124,6 +152,23 @@ public class ContractFileService implements FileService<Container<Contract>> {
                 return null;
 
         }
+    }
+
+    /**
+     * Defines if contract read from file should be added to container
+     *
+     * @param contract contract to validate
+     * @return true if contract validation defined that it can be added
+     */
+
+    private boolean shouldAdd ( Contract contract ) {
+        double validationResult = 0;
+        for (var validator : this.validators
+        ) {
+            validationResult += validator.validate ( contract );
+        }
+        validationResult /= this.validators.size ( );
+        return ( validationResult > 50 / 100 );
     }
 
 
