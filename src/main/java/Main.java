@@ -5,6 +5,9 @@ import model.client.Client;
 import model.client.Sex;
 import model.contract.*;
 import util.DateUtils;
+import validator.impl.ContractClientValidator;
+import validator.impl.DefaultContractValidator;
+import validator.impl.SpecificContractValidator;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -24,7 +27,11 @@ public class Main {
         ContractFileService service = new ContractFileService ();
 
         service.createFile ( contractContainer,"a.csv" );
-       Container<Contract>newContainer =  service.readFromFile ( "a.csv" );
+       Container<Contract>newContainer = new ContractContainer (  );
+       service.addValidator ( new ContractClientValidator () );
+       service.addValidator ( new DefaultContractValidator () );
+       service.addValidator ( new SpecificContractValidator () );
+       service.readFromFile ( "a.csv" ,newContainer);
         System.out.println ( newContainer );
 
 

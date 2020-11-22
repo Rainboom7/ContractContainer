@@ -10,21 +10,22 @@ public class ContractClientValidator implements Validator<Contract> {
     public double validate ( Contract element ) {
         double validationResult = 0;
         var client = element.getClient ( );
-        if ( client.getFio ( ).split ( " " ).length == 3 )
-            validationResult += 35 / 100;
-        else
-            validationResult += 20 / 100;
+        if ( client.getFio ( ).split ( " " ).length == 3 ) {
+            validationResult = 0.35;
+        } else {
+            validationResult += 0.2;
+        }
+        if ( client.getBirthDate ( ).getYear ( ) - new Date ( ).getYear ( ) < 14 ) {
+            validationResult += 0.35;
+        } else {
+            validationResult += 0.2;
+        }
+        if ( String.valueOf ( client.getPassportSeriesNumber ( ) ).length ( ) < 10 ) {
+            validationResult += 0.15;
+        } else {
+            validationResult += 0.3;
+        }
 
-        if ( client.getBirthDate ( ).getYear ( ) - new Date ( ).getYear ( ) < 14 )
-            validationResult += 35 / 100;
-
-        else
-            validationResult += 20 / 100;
-
-        if ( String.valueOf ( client.getPassportSeriesNumber ( ) ).length ( ) < 10 )
-            validationResult += 15 / 100;
-        else
-            validationResult += 30 / 100;
         return validationResult;
 
     }

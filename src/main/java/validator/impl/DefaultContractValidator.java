@@ -14,17 +14,19 @@ public class DefaultContractValidator implements Validator<Contract> {
         beginningCalendar.setTime ( element.getBeginningDate ( ) );
         endingCalendar.setTime ( element.getEndingDate ( ) );
         var validationResult = 0;
-        if ( element.getEndingDate ( ).after ( element.getEndingDate ( ) ) )
-            validationResult += 50 / 100;
-        else
-            validationResult += 5 / 100;
+        if ( element.getEndingDate ( ).after ( element.getEndingDate ( ) ) ) {
+            validationResult += 0.5;
+        } else {
+            validationResult += 0.05;
+        }
         if ( endingCalendar.get ( Calendar.YEAR ) - beginningCalendar.get ( Calendar.YEAR ) == 0
                 &&
                 endingCalendar.get ( Calendar.MONTH ) - beginningCalendar.get ( Calendar.MONTH ) < 1
-        )
-            validationResult += 30 / 100;
-        else
-            validationResult += 50 / 100;
+        ) {
+            validationResult += 0.3;
+        } else {
+            validationResult += 0.5;
+        }
         return validationResult;
     }
 }

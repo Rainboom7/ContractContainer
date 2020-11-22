@@ -12,24 +12,23 @@ public class SpecificContractValidator implements Validator<Contract> {
         if ( element instanceof CellularContract ) {
 
             var cellularContract = (CellularContract) element;
-
             if ( cellularContract.getMinutes ( ) < 60 )
-                validationResult += 30 / 100;
+                validationResult += 0.3;
             else
-                validationResult += 40 / 100;
+                validationResult += 0.4;
             if ( cellularContract.getMegabytes ( ) < 100 )
-                validationResult += 30 / 100;
+                validationResult += 0.3;
             else
-                validationResult += 40 / 100;
+                validationResult += 0.4;
             if ( cellularContract.getSmsAmount ( ) < 5 )
-                validationResult += 10 / 100;
+                validationResult += 0.1;
             else
-                validationResult += 20 / 100;
+                validationResult += 0.2;
             return validationResult;
         } else if ( element instanceof InternetContract ) {
             var internetContract = (InternetContract) element;
             if ( internetContract.getMaxMegabytesSpeed ( ) < 1 )
-                validationResult += 70 / 100;
+                validationResult += 0.7;
             else
                 validationResult += 1;
             return validationResult;

@@ -83,7 +83,7 @@ public class ContractFileService implements FileService<Container<Contract>> {
                 }
                 {
                     var contract = getContract ( line.split ( ",\t" ) );
-                    if ( shouldAdd ( contract ) )
+                    if ( shouldAdd ( contract ) && !contains ( contract, container ) )
                         container.add ( contract );
                     else
                         System.out.println ( "Contract was'nt added:\n" + contract.toString ( ) );
@@ -162,13 +162,34 @@ public class ContractFileService implements FileService<Container<Contract>> {
      */
 
     private boolean shouldAdd ( Contract contract ) {
+        if(this.validators.size ()==0)
+            return true;
         double validationResult = 0;
         for (var validator : this.validators
         ) {
             validationResult += validator.validate ( contract );
+
         }
+
         validationResult /= this.validators.size ( );
         return ( validationResult > 50 / 100 );
+    }
+
+    /**
+     * Checks if contract is present in container
+     *
+     * @param contract  contract to check
+     * @param container container  to look through
+     * @return true if contract is present in container
+     */
+    private boolean contains ( Contract contract, Container<Contract> container ) {
+        for (var containerContract : container.getAll ( )
+        ) {
+            if ( contract.equals ( containerContract ) )
+                return true;
+        }
+        return false;
+
     }
 
 
