@@ -60,7 +60,11 @@ public class ContractFileService implements FileService<Container<Contract>> {
                 ) {
                     System.out.println ( "|" + elem + "|" );
                 }
-                container.add ( getContract ( line.split ( ",\t" ) ) );
+                var contract = getContract ( line.split ( ",\t" ) );
+                if (  !contains ( contract, container ) )
+                    container.add ( contract );
+                else
+                    System.out.println ( "Contract was'nt added:\n" + contract.toString ( ) );
 
             }
         }
@@ -124,6 +128,22 @@ public class ContractFileService implements FileService<Container<Contract>> {
                 return null;
 
         }
+    }
+    /**
+     * Checks if contract is present in container
+     *
+     * @param contract  contract to check
+     * @param container container  to look through
+     * @return true if contract is present in container
+     */
+    private boolean contains ( Contract contract, Container<Contract> container ) {
+        for (var containerContract : container.getAll ( )
+        ) {
+            if ( contract.equals ( containerContract ) )
+                return true;
+        }
+        return false;
+
     }
 
 
