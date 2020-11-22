@@ -172,7 +172,7 @@ public class ContractFileService implements FileService<Container<Contract>> {
         }
 
         validationResult /= this.validators.size ( );
-        return ( validationResult > 50 / 100 );
+        return ( validationResult > 0.5 );
     }
 
     /**
