@@ -13,11 +13,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Optional;
 
 /**
  * Specific service which works with contract container.
  */
 public class ContractFileService implements FileService<Container<Contract>> {
+    private HashMap<Integer, Client> existingClients = new HashMap<> ( );
 
     /**
      * Creates file with given name and values from given container.
@@ -40,12 +43,13 @@ public class ContractFileService implements FileService<Container<Contract>> {
 
         }
     }
+
     /**
      * Reads values from given CSV file into contract container.
      *
      * @param filePath path to file from which you want to read values
-     * @throws IOException when error occurs while opening file or CSV file format is invalid|
      * @return Contract container with values from given file
+     * @throws IOException when error occurs while opening file or CSV file format is invalid|
      */
     @Override
     public Container<Contract> readFromFile ( String filePath ) throws IOException {
@@ -61,26 +65,33 @@ public class ContractFileService implements FileService<Container<Contract>> {
                     System.out.println ( "|" + elem + "|" );
                 }
                 var contract = getContract ( line.split ( ",\t" ) );
-                if (  !contains ( contract, container ) )
-                    container.add ( contract );
-                else
-                    System.out.println ( "Contract was'nt added:\n" + contract.toString ( ) );
+                container.add ( contract );
+
 
             }
+        } catch ( ParseException e ) {
+            throw new IOException ( "Wrong csv formatting" );
         }
-        catch ( ParseException e ) {
-        throw new IOException ( "Wrong csv formatting" );
-           }
         return container;
     }
+
     /**
      * inner method to read one line of file.
      *
      * @param line line from file whic was turned to array
-     * @throws ParseException when error occurs while parsing date
      * @return Contract parsed from line
+     * @throws ParseException when error occurs while parsing date
      */
     private Contract getContract ( String[] line ) throws ParseException {
+        var client = getClient ( Integer.valueOf ( line[ 4 ] ) ).orElse (
+                new Client (
+                        Integer.valueOf ( line[ 4 ] ),
+                        line[ 5 ],
+                        DateUtils.getDate ( line[ 6 ] ),
+                        Sex.valueOf ( line[ 7 ] ),
+                        Integer.valueOf ( line[ 8 ] ) )
+        );
+        addClient ( Integer.valueOf ( line[ 4 ] ), client );
 
         switch ( line[ 0 ] ) {
             case "TelevisionContract":
@@ -88,12 +99,8 @@ public class ContractFileService implements FileService<Container<Contract>> {
                         Integer.valueOf ( line[ 1 ] ),
                         DateUtils.getDate ( line[ 2 ] ),
                         DateUtils.getDate ( line[ 3 ] ),
-                        new Client (
-                                Integer.valueOf ( line[ 4 ] ),
-                                line[ 5 ],
-                                DateUtils.getDate ( line[ 6 ] ),
-                                Sex.valueOf ( line[ 7 ] ),
-                                Integer.valueOf ( line[ 8 ] ) ),
+                        client
+                        ,
                         ChannelPackage.valueOf ( line[ 9 ] )
                 );
             case "InternetContract":
@@ -101,12 +108,7 @@ public class ContractFileService implements FileService<Container<Contract>> {
                         Integer.valueOf ( line[ 1 ] ),
                         DateUtils.getDate ( line[ 2 ] ),
                         DateUtils.getDate ( line[ 3 ] ),
-                        new Client (
-                                Integer.valueOf ( line[ 4 ] ),
-                                line[ 5 ],
-                                DateUtils.getDate ( line[ 6 ] ),
-                                Sex.valueOf ( line[ 7 ] ),
-                                Integer.valueOf ( line[ 8 ] ) ),
+                        client,
                         Integer.valueOf ( line[ 9 ] )
                 );
             case "CellularContract":
@@ -114,12 +116,7 @@ public class ContractFileService implements FileService<Container<Contract>> {
                         Integer.valueOf ( line[ 1 ] ),
                         DateUtils.getDate ( line[ 2 ] ),
                         DateUtils.getDate ( line[ 3 ] ),
-                        new Client (
-                                Integer.valueOf ( line[ 4 ] ),
-                                line[ 5 ],
-                                DateUtils.getDate ( line[ 6 ] ),
-                                Sex.valueOf ( line[ 7 ] ),
-                                Integer.valueOf ( line[ 8 ] ) ),
+                        client,
                         Integer.valueOf ( line[ 9 ] ),
                         Integer.valueOf ( line[ 10 ] ),
                         Integer.valueOf ( line[ 11 ] )
@@ -129,21 +126,25 @@ public class ContractFileService implements FileService<Container<Contract>> {
 
         }
     }
-    /**
-     * Checks if contract is present in container
-     *
-     * @param contract  contract to check
-     * @param container container  to look through
-     * @return true if contract is present in container
-     */
-    private boolean contains ( Contract contract, Container<Contract> container ) {
-        for (var containerContract : container.getAll ( )
-        ) {
-            if ( contract.equals ( containerContract ) )
-                return true;
-        }
-        return false;
 
+    /**
+     * Checks if client  already have contracts
+     *
+     * @param clientId id of client
+     * @return Optional of existing clinet
+     */
+    private Optional<Client> getClient ( int clientId ) {
+        return Optional.of ( this.existingClients.get ( clientId ) );
+    }
+
+    /**
+     * Puts created client in existing client map
+     *
+     * @param clientId contract to check
+     * @param client   client
+     */
+    private void addClient ( int clientId, Client client ) {
+        this.existingClients.put ( clientId, client );
     }
 
 
