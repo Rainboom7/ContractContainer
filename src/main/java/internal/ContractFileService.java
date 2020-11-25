@@ -134,7 +134,7 @@ public class ContractFileService implements FileService<Container<Contract>> {
      * @return Optional of existing clinet
      */
     private Optional<Client> getClient ( int clientId ) {
-        return Optional.of ( this.existingClients.get ( clientId ) );
+        return Optional.ofNullable ( this.existingClients.get ( clientId ) );
     }
 
     /**
