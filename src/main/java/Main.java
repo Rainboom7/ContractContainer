@@ -4,6 +4,8 @@ import internal.ContractFileService;
 import model.client.Client;
 import model.client.Sex;
 import model.contract.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import util.DateUtils;
 import validator.impl.ContractClientValidator;
 import validator.impl.DefaultContractValidator;
@@ -15,7 +17,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Main {
+    private  static Logger logger = LogManager.getLogger ();
     public static void main ( String[] args ) throws Exception {
+
         ContractContainer contractContainer = new ContractContainer ( );
         for (int i = 0; i < 3; i++)
             contractContainer.add ( new TelevisionContract ( i, new Date ( ), new Date ( ), new Client ( i, "IVAN", new Date ( ), Sex.MALE, 12323112 ), ChannelPackage.CHILD ) );
@@ -32,7 +36,7 @@ public class Main {
        service.addValidator ( new DefaultContractValidator () );
        service.addValidator ( new SpecificContractValidator () );
        service.readFromFile ( "a.csv" ,newContainer);
-        System.out.println ( newContainer );
+        logger.debug ( newContainer );
 
 
 

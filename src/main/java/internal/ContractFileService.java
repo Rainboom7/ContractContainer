@@ -4,6 +4,8 @@ import container.Container;
 import model.client.Client;
 import model.client.Sex;
 import model.contract.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import util.DateUtils;
 import validator.Validator;
 import validator.ValidatorCode;
@@ -21,6 +23,7 @@ import java.util.Optional;
  */
 public class ContractFileService implements FileService<Container<Contract>> {
     private List<Validator<Contract>> validators;
+    private  static Logger logger = LogManager.getLogger ();
 
     public ContractFileService ( ) {
         this.validators = new ArrayList<> ( );
@@ -162,10 +165,10 @@ public class ContractFileService implements FileService<Container<Contract>> {
         ) {
             var result = validator.validate ( contract );
             if ( result.getCode ( ).equals ( ValidatorCode.ERROR ) ) {
-                System.out.println ( "Contract: \n" + contract + " \n wasn't added, error:\n" + result.getMessage ( ) );
+                logger.error ( "\nContract:" + contract + "\nwasn't added, error:\n" + result.getMessage ( ) );
                 return false;
             } else if ( result.getCode ( ).equals ( ValidatorCode.RISK ) ) {
-                System.out.println ( "Contract: \n" + contract + " \n was added but has errors:\n" + result.getMessage ( ) );
+                logger.warn ( "\nContract:" + contract + "\nwas added but has errors:\n" + result.getMessage ( ) );
             }
         }
         return true;

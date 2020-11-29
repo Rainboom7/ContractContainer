@@ -17,7 +17,7 @@ public class DefaultContractValidator implements Validator<Contract> {
         var endingCalendar = new GregorianCalendar ( );
         beginningCalendar.setTime ( element.getBeginningDate ( ) );
         endingCalendar.setTime ( element.getEndingDate ( ) );
-        if ( !( element.getEndingDate ( ).after ( element.getEndingDate ( ) ) ) ) {
+        if ( ( element.getBeginningDate ( ).after ( element.getEndingDate ( ) ) ) ) {
             return new ValidationResult ( ValidatorCode.ERROR, "Invalid contract date" );
         }
         if ( !( endingCalendar.get ( Calendar.YEAR ) - beginningCalendar.get ( Calendar.YEAR ) == 0
