@@ -1,6 +1,5 @@
 package container;
 
-import lombok.var;
 import model.client.Client;
 import model.contract.Contract;
 import util.sorter.BubbleContractSorter;
@@ -191,7 +190,7 @@ public class ContractContainer implements Container<Contract> {
     /**
      * Sorts contracts with given sorter and comparator.
      *
-     * @param sorter     the sortew which you want to youse while sorting
+     * @param sorter     the sorter which you want to use while sorting
      * @param comparator comparator which defines by which attribute you want to sort
      * @return the int value of capacity
      */

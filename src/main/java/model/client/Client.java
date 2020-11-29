@@ -2,6 +2,7 @@ package model.client;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import util.DateUtils;
 
 import java.util.Date;
 import java.util.Objects;
@@ -40,6 +41,15 @@ public class Client {
         if ( o == null || getClass ( ) != o.getClass ( ) ) return false;
         Client client = (Client) o;
         return id == client.id;
+    }
+
+    @Override
+    public String toString ( ) {
+        return id +
+                ",\t" + fio +
+                ",\t" + DateUtils.getString (birthDate )+
+                ",\t" + sex.name () +
+                ",\t" + passportSeriesNumber ;
     }
 
     @Override

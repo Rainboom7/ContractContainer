@@ -1,6 +1,5 @@
 package container;
 
-import lombok.var;
 import model.client.Client;
 import model.client.Sex;
 import model.contract.*;
@@ -23,7 +22,7 @@ public class ContractContainerTest {
 
     private final Contract cellularContract = new CellularContract ( 1,
             new GregorianCalendar ( 2010, 0, 11 ).getTime ( ),
-            new GregorianCalendar ( 2012, 0, 11 ).getTime ( ), firstClient, 132 );
+            new GregorianCalendar ( 2012, 0, 11 ).getTime ( ), firstClient, 132,123,213 );
     private final Contract internetContract = new InternetContract ( 2,
             new GregorianCalendar ( 2014, 0, 11 ).getTime ( ),
             new GregorianCalendar ( 2016, 0, 11 ).getTime ( ), firstClient, 75 );

@@ -12,6 +12,13 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 public class TelevisionContract extends Contract {
+    @Override
+    public String toString ( ) {
+        return "TelevisionContract,\t" +
+                super.toString ()+",\t"+
+                channelPackage +"\n";
+    }
+
     /**
      * Type of channel package
      */
