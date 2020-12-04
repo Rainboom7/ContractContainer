@@ -1,5 +1,6 @@
 package internal;
 
+import annotations.Inject;
 import container.Container;
 import model.client.Client;
 import model.client.Sex;
@@ -22,8 +23,9 @@ import java.util.Optional;
  * Specific service which works with contract container.
  */
 public class ContractFileService implements FileService<Container<Contract>> {
+    @Inject
     private List<Validator<Contract>> validators;
-    private  static Logger logger = LogManager.getLogger ();
+    private static Logger logger = LogManager.getLogger ( );
 
     public ContractFileService ( ) {
         this.validators = new ArrayList<> ( );

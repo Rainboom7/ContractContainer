@@ -1,5 +1,6 @@
 package container;
 
+import annotations.Inject;
 import model.client.Client;
 import model.contract.Contract;
 import util.sorter.BubbleContractSorter;
@@ -20,6 +21,7 @@ public class ContractContainer implements Container<Contract> {
     /**
      * Sorter that performs contracts' sorting.
      */
+    @Inject
     private ContainerSorter<Contract> sorter;
     /**
      * Index of last contract.
@@ -45,7 +47,6 @@ public class ContractContainer implements Container<Contract> {
         this.capacity = DEFAULT_CAPACITY;
         this.lastContract = -1;
         this.contracts = new Contract[ this.capacity ];
-        this.sorter = new MergeContractSorter ( );
     }
     /**
      * Instantiates a new Contract container with chosen sorter merge sorter;
@@ -64,7 +65,6 @@ public class ContractContainer implements Container<Contract> {
         this.capacity = container.capacity ( );
         this.lastContract = container.capacity ( );
         this.contracts = container.getAll ( );
-        this.sorter = new MergeContractSorter ( );
     }
     /**
      * Instantiates a new Contract container with given sorter and with given contracts by another container;

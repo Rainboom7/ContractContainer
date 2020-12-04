@@ -1,12 +1,13 @@
 package validator.impl;
 
+import annotations.Injectable;
 import model.contract.CellularContract;
 import model.contract.Contract;
 import model.contract.InternetContract;
 import validator.ValidationResult;
 import validator.Validator;
 import validator.ValidatorCode;
-
+@Injectable
 public class SpecificContractValidator implements Validator<Contract> {
     @Override
     public ValidationResult validate ( Contract element ) {

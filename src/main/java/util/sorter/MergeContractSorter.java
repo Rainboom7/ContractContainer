@@ -1,9 +1,10 @@
 package util.sorter;
 
+import annotations.Injectable;
 import model.contract.Contract;
 
 import java.util.Comparator;
-
+@Injectable
 public class MergeContractSorter implements ContainerSorter<Contract> {
     @Override
     public void sort ( Contract[] contracts, Comparator<? super Contract> comparator ) {

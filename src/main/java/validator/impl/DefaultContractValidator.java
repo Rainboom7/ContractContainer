@@ -1,5 +1,6 @@
 package validator.impl;
 
+import annotations.Injectable;
 import model.contract.Contract;
 import validator.ValidationResult;
 import validator.Validator;
@@ -7,7 +8,7 @@ import validator.ValidatorCode;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
+@Injectable
 public class DefaultContractValidator implements Validator<Contract> {
     @Override
     public ValidationResult validate ( Contract element ) {

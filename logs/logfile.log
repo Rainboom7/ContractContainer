@@ -18,3 +18,43 @@ Contract:CellularContract,	7,	10.11.2021,	10.11.2020,	7,	IVAN,	10.11.2020,	MALE,
 
 wasn't added, error:
 Invalid contract date
+[ERROR] 2020-12-04 07:26:56.913 [main] ContractFileService - 
+Contract:TelevisionContract,	1,	10.11.2030,	10.11.2020,	1,	IVAN,	10.11.2020,	MALE,	12323112,	CHILD
+
+wasn't added, error:
+Invalid contract date
+[ERROR] 2020-12-04 07:26:56.940 [main] ContractFileService - 
+Contract:CellularContract,	7,	10.11.2021,	10.11.2020,	7,	IVAN,	10.11.2020,	MALE,	12323112,	12,	1233,	32
+
+wasn't added, error:
+Invalid contract date
+[ERROR] 2020-12-04 14:46:07.312 [main] ContractFileService - 
+Contract:TelevisionContract,	1,	10.11.2030,	10.11.2020,	1,	IVAN,	10.11.2020,	MALE,	12323112,	CHILD
+
+wasn't added, error:
+Invalid contract date
+[ERROR] 2020-12-04 14:46:07.341 [main] ContractFileService - 
+Contract:CellularContract,	7,	10.11.2021,	10.11.2020,	7,	IVAN,	10.11.2020,	MALE,	12323112,	12,	1233,	32
+
+wasn't added, error:
+Invalid contract date
+[ERROR] 2020-12-04 14:47:21.298 [main] ContractFileService - 
+Contract:TelevisionContract,	1,	10.11.2030,	10.11.2020,	1,	IVAN,	10.11.2020,	MALE,	12323112,	CHILD
+
+wasn't added, error:
+Invalid contract date
+[ERROR] 2020-12-04 14:47:21.320 [main] ContractFileService - 
+Contract:CellularContract,	7,	10.11.2021,	10.11.2020,	7,	IVAN,	10.11.2020,	MALE,	12323112,	12,	1233,	32
+
+wasn't added, error:
+Invalid contract date
+[ERROR] 2020-12-04 14:47:47.214 [main] ContractFileService - 
+Contract:TelevisionContract,	1,	10.11.2030,	10.11.2020,	1,	IVAN,	10.11.2020,	MALE,	12323112,	CHILD
+
+wasn't added, error:
+Invalid contract date
+[ERROR] 2020-12-04 14:47:47.236 [main] ContractFileService - 
+Contract:CellularContract,	7,	10.11.2021,	10.11.2020,	7,	IVAN,	10.11.2020,	MALE,	12323112,	12,	1233,	32
+
+wasn't added, error:
+Invalid contract date
