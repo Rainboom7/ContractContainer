@@ -10,6 +10,7 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -83,14 +84,19 @@ public class Injector {
     private List<Object> injectList ( Field field ) {
         var injectedList = new ArrayList<> ( );
         var parametrizedType = (ParameterizedType) field.getGenericType ( );
+
         for (var typeArgument : parametrizedType.getActualTypeArguments ( )) {
             for (var presentClass : this.configurationClasses
             ) {
                 try {
-                    var interfaces = Arrays.asList ( presentClass.getGenericInterfaces ( ) );
+                    List<Type> interfaces;
+                    //Checking if type of list is generic itself
+                    if ( typeArgument.toString ( ).contains ( "<" ) && typeArgument.toString ( ).contains ( ">" ) )
+                        interfaces = Arrays.asList ( presentClass.getGenericInterfaces ( ) );
+                    else
+                        interfaces = Arrays.asList ( presentClass.getInterfaces ( ) );
                     if ( interfaces.contains ( typeArgument ) )
                         injectedList.add ( presentClass.getConstructor ( ).newInstance ( ) );
-
                 } catch ( InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e ) {
                     e.printStackTrace ( );
                 }
@@ -101,8 +107,14 @@ public class Injector {
 
     private Object injectObject ( Field field ) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         var type = field.getType ( );
-        var suitableClasses = this.configurationClasses.stream ( ).filter ( f -> Arrays.asList ( f.getInterfaces ( ) ).contains ( type ) ).collect ( Collectors.toList ( ) );
-        if ( suitableClasses.size ( ) > 1 )
+        var genericType = field.getGenericType ( );
+        logger.debug ( genericType );
+        List<Class> suitableClasses;
+        if ( genericType != null )
+            suitableClasses = this.configurationClasses.stream ( ).filter ( f -> Arrays.asList ( f.getGenericInterfaces ( ) ).contains ( genericType ) ).collect ( Collectors.toList ( ) );
+        else
+            suitableClasses = this.configurationClasses.stream ( ).filter ( f -> Arrays.asList ( f.getInterfaces ( ) ).contains ( type ) ).collect ( Collectors.toList ( ) );
+        if ( suitableClasses.size ( ) != 1 )
             throw new ClassNotFoundException ( "More than one suitable class for injecting" );
         return suitableClasses.get ( 0 ).getConstructor ( ).newInstance ( );
 

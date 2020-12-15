@@ -1,13 +1,14 @@
 package container;
 
+import annotations.GenericFor;
 import annotations.Inject;
-import model.client.Client;
 import model.contract.Contract;
-import util.sorter.BubbleContractSorter;
 import util.sorter.ContainerSorter;
-import util.sorter.MergeContractSorter;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
@@ -22,6 +23,7 @@ public class ContractContainer implements Container<Contract> {
      * Sorter that performs contracts' sorting.
      */
     @Inject
+    @GenericFor(Contract.class)
     private ContainerSorter<Contract> sorter;
     /**
      * Index of last contract.
@@ -190,7 +192,6 @@ public class ContractContainer implements Container<Contract> {
     /**
      * Sorts contracts with given sorter and comparator.
      *
-     * @param sorter     the sorter which you want to use while sorting
      * @param comparator comparator which defines by which attribute you want to sort
      * @return the int value of capacity
      */
