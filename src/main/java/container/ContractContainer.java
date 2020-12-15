@@ -1,6 +1,5 @@
 package container;
 
-import annotations.GenericFor;
 import annotations.Inject;
 import model.contract.Contract;
 import util.sorter.ContainerSorter;
@@ -23,7 +22,6 @@ public class ContractContainer implements Container<Contract> {
      * Sorter that performs contracts' sorting.
      */
     @Inject
-    @GenericFor(Contract.class)
     private ContainerSorter<Contract> sorter;
     /**
      * Index of last contract.

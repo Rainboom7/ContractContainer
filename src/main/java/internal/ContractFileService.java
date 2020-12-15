@@ -1,6 +1,5 @@
 package internal;
 
-import annotations.GenericFor;
 import annotations.Inject;
 import container.Container;
 import model.client.Client;
@@ -25,7 +24,6 @@ import java.util.Optional;
  */
 public class ContractFileService implements FileService<Container<Contract>> {
     @Inject
-    @GenericFor(Contract.class)
     private List<Validator<Contract>> validators;
     private static Logger logger = LogManager.getLogger ( );
 
